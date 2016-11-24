@@ -1,21 +1,41 @@
 # coding:utf8
 from urllib import request
 import os
+import json
 
 class Downloader(object):
-
-    # 下载指定url对应的html
-    def download_html(self,url):
+    # 获取指定url请求返回的响应
+    def _get_response(self,url):
         if url is None:
             return None
 
-        req=request.Request(url)
+        req = request.Request(url)
         # 模拟火狐浏览器
         req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0')
-        response=request.urlopen(req)
-        if response.status!=200:
+        response = request.urlopen(req)
+        if response.status != 200:
             return None
-        return response.read()
+        return response.read().decode('utf-8')
+
+    # 获取指定di对应的url
+    def get_url_from_id(self,id):
+        # {"result": 0, "data": {"result": {"mid": 6687, "mpath": [
+        #     "http:\/\/v2.mukewang.com\/e849a994-0ca1-4e6f-a73c-57437a3fb2e7\/L.mp4?auth_key=1479972233-0-0-cf38a3c69532b41284b2de63738eb359",
+        #     "http:\/\/v2.mukewang.com\/e849a994-0ca1-4e6f-a73c-57437a3fb2e7\/M.mp4?auth_key=1479972233-0-0-3b4d5d716f474a9d33dda9b364c2dd8e",
+        #     "http:\/\/v2.mukewang.com\/e849a994-0ca1-4e6f-a73c-57437a3fb2e7\/H.mp4?auth_key=1479972233-0-0-9248ccde9e7471bb5bb19a1196cc71e8"],
+        #                                   "cpid": "1689", "name": "Node.js\u57fa\u7840-\u524d\u8a00", "time": 0,
+        #                                   "practise": []}}, "msg": "\u6210\u529f"}
+        url = 'http://www.imooc.com/course/ajaxmediainfo/?mid='+id+'&mode=flash'
+        # 返回的是string化的json数据
+        res=self._get_response(url)
+        # json.load载入后为dict数据
+        dict_data = json.loads(res)
+        # 返回高清视频对应的url
+        return dict_data['data']['result']['mpath'][2]
+
+    # 下载指定url对应的html
+    def download_html(self,url):
+        return self._get_response(url)
 
     # 下载指定url对应的mp4
     def download_mp4(self, url,name,course_name):

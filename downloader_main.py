@@ -33,8 +33,10 @@ class Downloader_Main(object):
         root_url = 'http://www.imooc.com/learn/' + course_num
         # 下载课程即root_url对应的html
         html_cont = self.downloader.download_html(root_url)
+        #print(html_cont)
         # 解析课程html返回mp4列表、url列表和课程名称
         mp4_lists,urls,course_name = self.parser.parse(html_cont)
+        #print(mp4_lists,urls,course_name)
         # 添加urls到url管理器
         self.urls.add_urls(urls)
         # url管理器非空,执行以下循环
