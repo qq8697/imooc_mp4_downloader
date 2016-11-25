@@ -2,8 +2,24 @@
 from urllib import request
 import os
 import json
+import sys
 
 class Downloader(object):
+    # 显示下载进度
+    def _cb(self,blocknum, blocksize, totalsize):
+        '''回调函数
+        @blocknum: 已经下载的数据块
+        @blocksize: 数据块的大小
+        @totalsize: 远程文件的大小
+        '''
+        percent = 100.0 * blocknum * blocksize / totalsize
+        if percent > 100:
+            percent = 100
+        # 格式化输出下载进度,不需要换行
+        sys.stdout.write("'[%.2f%%]  \r" % (percent))
+        # 让下载百分比再同一行不断刷新
+        sys.stdout.flush()
+
     # 获取指定url请求返回的响应
     def _get_response(self,url):
         if url is None:
@@ -17,7 +33,7 @@ class Downloader(object):
             return None
         return response.read().decode('utf-8')
 
-    # 获取指定di对应的url
+    # 获取指定id对应的url
     def get_url_from_id(self,id):
         # {"result": 0, "data": {"result": {"mid": 6687, "mpath": [
         #     "http:\/\/v2.mukewang.com\/e849a994-0ca1-4e6f-a73c-57437a3fb2e7\/L.mp4?auth_key=1479972233-0-0-cf38a3c69532b41284b2de63738eb359",
@@ -48,4 +64,4 @@ class Downloader(object):
         # 创建视频保存地址
         addr= os.path.join(course_dir, name+ '.mp4')
         # 下载url地址对应的视频到课程目录下，并以视频的名称命名
-        request.urlretrieve(url, addr)
+        request.urlretrieve(url, addr,self._cb)

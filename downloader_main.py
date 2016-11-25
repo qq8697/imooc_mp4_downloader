@@ -14,6 +14,7 @@
     3. 下载mp4视频
 '''
 from moocmp4_downloader import url_manager, downloader, html_parser, html_outputer
+from datetime import datetime
 
 class Downloader_Main(object):
     # 初始化函数
@@ -29,14 +30,14 @@ class Downloader_Main(object):
 
     # 下载课程
     def download(self, course_num):
+        # 计时器
+        start = datetime.now()
         # 得到课程编号对应的root_url
         root_url = 'http://www.imooc.com/learn/' + course_num
         # 下载课程即root_url对应的html
         html_cont = self.downloader.download_html(root_url)
-        #print(html_cont)
         # 解析课程html返回mp4列表、url列表和课程名称
         mp4_lists,urls,course_name = self.parser.parse(html_cont)
-        #print(mp4_lists,urls,course_name)
         # 添加urls到url管理器
         self.urls.add_urls(urls)
         # url管理器非空,执行以下循环
@@ -45,13 +46,14 @@ class Downloader_Main(object):
                 # 获取新的url
                 url = self.urls.get_url()
                 # 输出待爬取的url
-                print('下载:%s' % mp4_lists[url])
+                print('下载:%s，地址为:%s' % (mp4_lists[url],url))
                 # 下载url对应的视频
                 self.downloader.download_mp4(url,mp4_lists[url],course_name)
             except:
-                print('download failed,re download')
+                print('下载失败，重新下载')
         # 输出html页面
-        self.outputer.output(mp4_lists)
+        self.outputer.output(mp4_lists,course_name)
+        print('共用时：', (datetime.now() - start + datetime(1970, 1, 1)).strftime('%H:%M:%S'))
 
 if __name__ == '__main__':
     # 得到课程编号

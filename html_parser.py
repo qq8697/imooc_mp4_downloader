@@ -70,5 +70,7 @@ class HtmlParser(object):
         mp4,urls=self._get_urls(soup)
         course_name=self._get_course_name(soup)
 
-        print(mp4)
+        # print('mp4是： %s'%mp4)
+        # print('url列表是： %s'%urls)
+        # print('课程的名字是： %s'%course_name)
         return mp4,urls,course_name
