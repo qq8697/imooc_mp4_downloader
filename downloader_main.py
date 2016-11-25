@@ -42,15 +42,16 @@ class Downloader_Main(object):
         self.urls.add_urls(urls)
         # url管理器非空,执行以下循环
         while self.urls.has_url():
+            # 获取新的url
+            url = self.urls.get_url()
+            # 输出待爬取的url
+            print('下载:%s，地址为:%s' % (mp4_lists[url],url))
             try:
-                # 获取新的url
-                url = self.urls.get_url()
-                # 输出待爬取的url
-                print('下载:%s，地址为:%s' % (mp4_lists[url],url))
                 # 下载url对应的视频
                 self.downloader.download_mp4(url,mp4_lists[url],course_name)
             except:
-                print('下载失败，重新下载')
+                print('%s下载失败，重新下载'% mp4_lists[url])
+                self.urls.add_url(url)
         # 输出html页面
         self.outputer.output(mp4_lists,course_name)
         print('共用时：', (datetime.now() - start + datetime(1970, 1, 1)).strftime('%H:%M:%S'))
