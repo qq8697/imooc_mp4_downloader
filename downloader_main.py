@@ -19,6 +19,7 @@ import os
 sys.path.append(os.path.split(os.getcwd())[0])
 from moocmp4_downloader import url_manager, downloader, html_parser, html_outputer
 from datetime import datetime
+# from multiprocessing import Pool
 
 class Downloader_Main(object):
     # 初始化函数
@@ -34,6 +35,9 @@ class Downloader_Main(object):
 
     # 下载课程
     def download(self, course_num):
+        # 输出执行进程与对应的下课程id
+        # print('%s进程负责下载%s' % (os.getpid(), course_num))
+
         # 计时器
         start = datetime.now()
         # 得到课程编号对应的root_url
@@ -67,3 +71,10 @@ if __name__ == '__main__':
     downloader = Downloader_Main()
     # 下载指定课程
     downloader.download(course_num)
+
+    # 得到课程编号
+    # courses = input('请输入课程id，多个id用空格隔开').split()
+    # 创建进程池
+    # p = Pool()
+    # 实例化下载器,下载指定课程
+    # p.map(Downloader_Main().download, courses)

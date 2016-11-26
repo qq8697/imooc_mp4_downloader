@@ -40,24 +40,25 @@ class HtmlParser(object):
             mp4_id=str.replace(href,"/video/",'')
             # 获取text内容        1 - 1 Node.js基础 - 前言 (01:20)
             text=s.get_text()
-            # 过滤非视频url,以是否有时间为标准(01:20)
+
+            # 过滤非视频,以text是否有时间为标准(01:20)
             time_pattern=re.compile('\(\d{2}:\d{2}\)')  # TODO 注意JavaScript和python的正则分别/\(\d{2}:\d{2}\)/和'\(\d{2}:\d{2}\)'
             if(not re.search(time_pattern,text)):
                 total=total-1
                 if(total==0 ):
-                    print("没有视频可以下载！")
-                return None
+                    exit("没有视频可以下载！")
+            else:
+                # 去掉时间，去掉空格，去掉'开始学习'，只留视频名称
+                tmp1=re.sub(time_pattern,'',text)
+                space_pattern=re.compile('\s*')
+                tmp2 = re.sub(space_pattern, '', tmp1)
+                mp4_name = re.sub('开始学习', '', tmp2)
 
-            # 去掉时间，去掉空格，去掉'开始学习'，只留视频名称
-            tmp1=re.sub(time_pattern,'',text)
-            space_pattern=re.compile('\s*')
-            tmp2 = re.sub(space_pattern, '', tmp1)
-            mp4_name = re.sub('开始学习', '', tmp2)
+                # 获取视频url
+                mp4_url=self._get_mp4_url(mp4_id)
+                urls.append(mp4_url)
+                mp4[mp4_url]=mp4_name
 
-            # 获取视频url
-            mp4_url=self._get_mp4_url(mp4_id)
-            urls.append(mp4_url)
-            mp4[mp4_url]=mp4_name
         return mp4,urls
 
     # 获得课程的名字
