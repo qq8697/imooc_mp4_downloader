@@ -1,7 +1,10 @@
 # coding:utf8
+import sys
+import os
+sys.path.append(os.path.split(os.getcwd())[0])
+from moocmp4_downloader import downloader
 from bs4 import BeautifulSoup
 import re
-from moocmp4_downloader import downloader
 
 class HtmlParser(object):
     # 初始化函数

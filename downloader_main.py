@@ -13,6 +13,10 @@
         -->配合try except实现断点续传
     3. 下载mp4视频
 '''
+# 添加当前目录到path
+import sys
+import os
+sys.path.append(os.path.split(os.getcwd())[0])
 from moocmp4_downloader import url_manager, downloader, html_parser, html_outputer
 from datetime import datetime
 
@@ -58,7 +62,7 @@ class Downloader_Main(object):
 
 if __name__ == '__main__':
     # 得到课程编号
-    course_num = input('请输入课程id，如进击Node.js基础（一）url地址为http://www.imooc.com/learn/348，则输入348')
+    course_num = input('请输入课程id...')
     # 实例化下载器
     downloader = Downloader_Main()
     # 下载指定课程
