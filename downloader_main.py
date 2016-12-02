@@ -42,7 +42,7 @@ class Downloader_Main(object):
         start = datetime.now()
         # 得到课程编号对应的root_url
         root_url = 'http://www.imooc.com/learn/' + course_num
-        # 下载课程即root_url对应的html
+        # 下载课程即url对应的html
         html_cont = self.downloader.download_html(root_url)
         # 解析课程html返回mp4列表、url列表和课程名称
         mp4_lists,urls,course_name = self.parser.parse(html_cont)
