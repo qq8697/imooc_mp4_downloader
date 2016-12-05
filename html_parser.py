@@ -46,6 +46,7 @@ class HtmlParser(object):
             if(not re.search(time_pattern,text)):
                 total=total-1
                 if(total==0 ):
+                    # 没有视频下载时给出提示信息并退出程序
                     exit("没有视频可以下载！")
             else:
                 # 去掉时间，去掉空格，去掉'开始学习'，只留视频名称

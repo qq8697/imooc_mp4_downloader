@@ -27,7 +27,3 @@ class UrlManager():
         # if url not in self.old_urls:
         # self.old_urls.add(url)
         return url
-
-
-        # def v2tov1(self):
-    #     pass
